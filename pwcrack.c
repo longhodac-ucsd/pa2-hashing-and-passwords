@@ -28,14 +28,11 @@ int main(int argc, char** argv) {
     unsigned char given_hash[32];
     hexstr_to_hash(argv[1], given_hash);
 
-    // Read passwords from standard input (expected by the autograder)
     char password[256];
     while (fgets(password, sizeof(password), stdin)) {
-        // Remove newline character, if present
         password[strcspn(password, "\n")] = 0;
 
         if (crack_password(password, given_hash)) {
-            // Print the found password in the required format
             printf("Found password: SHA256(%s) = ", password);
             for (int i = 0; i < 32; i++) {
                 printf("%02x", given_hash[i]);
