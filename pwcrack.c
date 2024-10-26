@@ -1,3 +1,7 @@
+// Long HoDac
+// PA 2 - Password cracking
+// 10/25/2024
+
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
@@ -45,7 +49,8 @@ int main(int argc, char** argv) {
         hexstr_to_hash(argv[1], user_hash);
 
         printf("Computed hash for input: ");
-        for (int i = 0; i < 32; i++) {
+        int i;
+        for (i = 0; i < 32; i++) {
             printf("%02x", user_hash[i]);
         }
         printf("\n");
@@ -83,7 +88,8 @@ uint8_t hex_to_byte(unsigned char h1, unsigned char h2) {
 }
 
 void hexstr_to_hash(char hexstr[], unsigned char hash[32]) {
-    for (int i = 0; i < 32; i++) {
+    int i;
+    for (i = 0; i < 32; i++) {
         hash[i] = hex_to_byte(hexstr[2 * i], hexstr[2 * i + 1]);
     }
 }
@@ -96,7 +102,8 @@ int8_t check_password(char password[], unsigned char given_hash[32]){
     // Calculate the SHA256 Hash
     SHA256((unsigned char*)password, strlen(password), computed_hash);
 
-    for (int i = 0; i < 32; i++){
+    int i;
+    for (i = 0; i < 32; i++){
         if (computed_hash[i] != given_hash[i]){
             return 0;
         }
@@ -114,7 +121,8 @@ int8_t crack_password(char password[], unsigned char given_hash[]){
         return 1;
     }
 
-    for(int i = 0; i < pw_len; i++){
+    int i;
+    for(i = 0; i < pw_len; i++){
         char old_char = password[i];
 
         if (password[i] >= 'a' && password[i] <= 'z'){
