@@ -117,7 +117,13 @@ int8_t check_password(char password[], unsigned char given_hash[32]){
 int8_t crack_password(char password[], unsigned char given_hash[]){
     int pw_len = strlen(password);
 
-    if(check_password(password, given_hash)){
+    if (check_password(password, given_hash)) {
+        printf("Found password: SHA256(%s) = ", password);
+        int i;
+        for (i = 0; i < 32; i++) {
+            printf("%02x", given_hash[i]);
+        }
+        printf("\n");
         return 1;
     }
 
@@ -128,13 +134,26 @@ int8_t crack_password(char password[], unsigned char given_hash[]){
         if (password[i] >= 'a' && password[i] <= 'z'){
             password[i] -= 32;
             if(check_password(password, given_hash)){
+                printf("Found password: SHA256(%s) = ", password);
+                int j;
+                for (j = 0; j < 32; j++) {
+                    printf("%02x", given_hash[j]);
+                }
+                printf("\n");
                 return 1;
             }
             password[i] = old_char;
         }
+
         else if (password[i] >= 'A' && password[i] <= 'Z'){
             password[i] += 32;
-            if(check_password(password, given_hash)){
+            if (check_password(password, given_hash)) {
+                printf("Found password: SHA256(%s) = ", password);
+                int j;
+                for (j = 0; j < 32; j++) {
+                    printf("%02x", given_hash[j]);
+                }
+                printf("\n");
                 return 1;
             }
             password[i] = old_char;
@@ -160,7 +179,7 @@ void test_hexstr_to_hash() {
 
     // Print the hash for visual validation
     printf("Hash: ");
-    
+
     int i;
     for (i = 0; i < 32; i++) {
         printf("%02x", hash[i]);
