@@ -160,7 +160,9 @@ void test_hexstr_to_hash() {
 
     // Print the hash for visual validation
     printf("Hash: ");
-    for (int i = 0; i < 32; i++) {
+    
+    int i;
+    for (i = 0; i < 32; i++) {
         printf("%02x", hash[i]);
     }
     printf("\n");
