@@ -54,6 +54,41 @@ int8_t check_password(char password[], unsigned char given_hash[32]){
 
 }
 
+// Milestone 3
+
+int8_t crack_password(char password[], unsigned char given_hash[]){
+    int pw_len = strlen(password);
+
+    if(check_password(password, given_hash)){
+        return 1;
+    }
+
+    for(int i = 0; i < pw_len; i++){
+        char old_char = password[i];
+
+        if (password[i] >= 'a' && password[i] <= 'z'){
+            password[i] -= 32;
+            if(check_password(password, given_hash)){
+                return 1;
+            }
+            password[i] = old_char;
+        }
+        else if (password[i] >= 'A' && password[i] <= 'A'){
+            password[i] += 32;
+            if(check_password(password, given_hash)){
+                return 1;
+            }
+            password[i] = old_char;
+        }
+
+    }
+
+    return 0;
+
+}
+
+// Testing functions
+
 void test_hex_to_byte() {
     assert(hex_to_byte('c', '8') == 200);  // Corrected missing semicolon
     // You can add more test cases as needed
@@ -103,7 +138,7 @@ int main(int argc, char** argv) {
     hexstr_to_hash(hash_as_hexstr, given_hash);
     assert(check_password("password", given_hash) == 1);
     assert(check_password("wrongpass", given_hash) == 0);
-    printf("All assertiion passed");
-    
+    printf("All assertion passed");
+
     return 0;
 }
