@@ -124,7 +124,7 @@ int8_t crack_password(char password[], unsigned char given_hash[]){
             }
             password[i] = old_char;
         }
-        else if (password[i] >= 'A' && password[i] <= 'A'){
+        else if (password[i] >= 'A' && password[i] <= 'Z'){
             password[i] += 32;
             if(check_password(password, given_hash)){
                 return 1;
