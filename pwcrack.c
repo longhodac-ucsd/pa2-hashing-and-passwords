@@ -135,11 +135,6 @@ int8_t crack_password(char password[], unsigned char given_hash[]){
             password[i] -= 32;
             if(check_password(password, given_hash)){
                 printf("Found password: SHA256(%s) = ", password);
-                int j;
-                for (j = 0; j < 32; j++) {
-                    printf("%02x", given_hash[j]);
-                }
-                printf("\n");
                 return 1;
             }
             password[i] = old_char;
@@ -149,11 +144,6 @@ int8_t crack_password(char password[], unsigned char given_hash[]){
             password[i] += 32;
             if (check_password(password, given_hash)) {
                 printf("Found password: SHA256(%s) = ", password);
-                int j;
-                for (j = 0; j < 32; j++) {
-                    printf("%02x", given_hash[j]);
-                }
-                printf("\n");
                 return 1;
             }
             password[i] = old_char;
