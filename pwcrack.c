@@ -5,6 +5,57 @@
 #include <openssl/sha.h>
 #include<assert.h>
 
+// Function prototypes
+void test_hex_to_byte();
+void test_hexstr_to_hash();
+int8_t check_password(char password[], unsigned char given_hash[]);
+int8_t crack_password(char password[], unsigned char given_hash[]);
+void hexstr_to_hash(char hexstr[], unsigned char hash[32]);
+
+const int testing = 1;
+
+int main(int argc, char** argv) {
+    // Run test cases if testing is enabled
+    if (testing) {
+        test_hex_to_byte();
+        test_hexstr_to_hash();
+
+        // Test check_password function
+        char hash_as_hexstr1[] = "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"; // SHA256 hash for "password"
+        unsigned char given_hash1[32];
+        hexstr_to_hash(hash_as_hexstr1, given_hash1);
+
+        assert(check_password("password", given_hash1) == 1);
+        assert(check_password("wrongpass", given_hash1) == 0);
+
+        // Test crack_password function
+        char password_to_crack[] = "paSsword";
+        unsigned char given_hash2[32];
+        hexstr_to_hash(hash_as_hexstr1, given_hash2);
+
+        int8_t match = crack_password(password_to_crack, given_hash2);
+        assert(match == 1);
+        assert(password_to_crack[2] == 's'); // Expect uppercase 'S' to be lowercased
+        printf("All assertions passed.\n");
+    }
+
+    // Verify user input for hash conversion
+    if (argc > 1 && strlen(argv[1]) == 64) {
+        unsigned char user_hash[32];
+        hexstr_to_hash(argv[1], user_hash);
+
+        printf("Computed hash for input: ");
+        for (int i = 0; i < 32; i++) {
+            printf("%02x", user_hash[i]);
+        }
+        printf("\n");
+    } else {
+        printf("Usage: %s <64-char hex string>\n", argv[0]);
+    }
+
+    return 0;
+}
+
 // Milestone 1'
 
 uint8_t hex_to_byte(unsigned char h1, unsigned char h2) {
@@ -111,42 +162,4 @@ void test_hexstr_to_hash() {
     assert(hash[31] == 0xfd);
 }
 
-const int testing = 1;
 
-int main(int argc, char** argv) {
-    if (testing) {
-        test_hex_to_byte();
-        test_hexstr_to_hash();
-    }
-
-    if (argc > 1 && strlen(argv[1]) == 64) {
-        unsigned char hash[32];
-        hexstr_to_hash(argv[1], hash);
-
-        // Print the computed hash
-        printf("Computed hash for input: ");
-        for (int i = 0; i < 32; i++) {
-            printf("%02x", hash[i]);
-        }
-        printf("\n");
-    } else {
-        printf("Usage: %s <64-char hex string>\n", argv[0]);
-    }
-
-    char hash_as_hexstr[] = "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"; // SHA256 hash for "password"
-    unsigned char given_hash[32];
-    hexstr_to_hash(hash_as_hexstr, given_hash);
-    assert(check_password("password", given_hash) == 1);
-    assert(check_password("wrongpass", given_hash) == 0);
-
-    char password[] = "paSsword";
-    char hash_as_hexstr[] = "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"; // SHA256 hash of "password"
-    unsigned char given_hash[32];
-    hexstr_to_hash(hash_as_hexstr, given_hash);
-    int8_t match = crack_password(password, given_hash);
-    assert(match == 1);
-    assert(password[2] == 's'); // the uppercase 'S' has been lowercased
-    printf("All assertion passed");
-
-    return 0;
-}
