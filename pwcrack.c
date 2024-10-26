@@ -103,6 +103,7 @@ int main(int argc, char** argv) {
     hexstr_to_hash(hash_as_hexstr, given_hash);
     assert(check_password("password", given_hash) == 1);
     assert(check_password("wrongpass", given_hash) == 0);
-
+    printf("All assertiion passed");
+    
     return 0;
 }
