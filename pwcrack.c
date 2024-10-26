@@ -43,7 +43,7 @@ int8_t check_password(char password[], unsigned char given_hash[32]){
     unsigned char computed_hash_str[32]; 
 
     // Calculate the SHA256 Hash
-    SHA256(password, strlen(pass), computed_hash);
+    SHA256(password, strlen(password), computed_hash_str);
 
     // compute the given_has to the computed hash
     unsigned char computed_hash[32];
