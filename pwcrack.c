@@ -160,7 +160,6 @@ void test_hexstr_to_hash() {
     }
     printf("\n");
 
-    // Test assertions
     assert(hash[0] == 0xa2);
     assert(hash[31] == 0xfd);
 }
