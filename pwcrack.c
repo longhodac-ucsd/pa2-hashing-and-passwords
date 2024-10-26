@@ -40,14 +40,10 @@ void hexstr_to_hash(char hexstr[], unsigned char hash[32]) {
 // Milestone 2
 
 int8_t check_password(char password[], unsigned char given_hash[32]){
-    unsigned char computed_hash_str[32]; 
+    unsigned char computed_hash[32]; 
 
     // Calculate the SHA256 Hash
-    SHA256((unsigned char*)password, strlen(password), computed_hash_str);
-
-    // compute the given_has to the computed hash
-    unsigned char computed_hash[32];
-    hexstr_to_hash(computed_hash_str, computed_hash);
+    SHA256((unsigned char*)password, strlen(password), computed_hash);
 
     for (int i = 0; i < 32; i++){
         if (computed_hash[i] != given_hash[i]){
@@ -57,8 +53,6 @@ int8_t check_password(char password[], unsigned char given_hash[32]){
     return 1;
 
 }
-
-
 
 void test_hex_to_byte() {
     assert(hex_to_byte('c', '8') == 200);  // Corrected missing semicolon
