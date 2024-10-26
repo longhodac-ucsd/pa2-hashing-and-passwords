@@ -34,7 +34,8 @@ int main(int argc, char** argv) {
 
         if (crack_password(password, given_hash)) {
             printf("Found password: SHA256(%s) = ", password);
-            for (int i = 0; i < 32; i++) {
+            int i;
+            for (i = 0; i < 32; i++) {
                 printf("%02x", given_hash[i]);
             }
             printf("\n");
