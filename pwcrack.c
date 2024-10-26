@@ -19,45 +19,34 @@ void hexstr_to_hash(char hexstr[], unsigned char hash[32]);
 const int testing = 1;
 
 int main(int argc, char** argv) {
-    // Run test cases if testing is enabled
-    if (testing) {
-        test_hex_to_byte();
-        test_hexstr_to_hash();
-
-        // Test check_password function
-        char hash_as_hexstr1[] = "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"; // SHA256 hash for "password"
-        unsigned char given_hash1[32];
-        hexstr_to_hash(hash_as_hexstr1, given_hash1);
-
-        assert(check_password("password", given_hash1) == 1);
-        assert(check_password("wrongpass", given_hash1) == 0);
-
-        // Test crack_password function
-        char password_to_crack[] = "paSsword";
-        unsigned char given_hash2[32];
-        hexstr_to_hash(hash_as_hexstr1, given_hash2);
-
-        int8_t match = crack_password(password_to_crack, given_hash2);
-        assert(match == 1);
-        assert(password_to_crack[2] == 's'); // Expect uppercase 'S' to be lowercased
-        printf("All assertions passed.\n");
-    }
-
-    // Verify user input for hash conversion
-    if (argc > 1 && strlen(argv[1]) == 64) {
-        unsigned char user_hash[32];
-        hexstr_to_hash(argv[1], user_hash);
-
-        printf("Computed hash for input: ");
-        int i;
-        for (i = 0; i < 32; i++) {
-            printf("%02x", user_hash[i]);
-        }
-        printf("\n");
-    } else {
+    if (argc != 2) {
         printf("Usage: %s <64-char hex string>\n", argv[0]);
+        return 1;
     }
 
+    // Convert given hash from hex string to byte array
+    unsigned char given_hash[32];
+    hexstr_to_hash(argv[1], given_hash);
+
+    // Read passwords from standard input (expected by the autograder)
+    char password[256];
+    while (fgets(password, sizeof(password), stdin)) {
+        // Remove newline character, if present
+        password[strcspn(password, "\n")] = 0;
+
+        if (crack_password(password, given_hash)) {
+            // Print the found password in the required format
+            printf("Found password: SHA256(%s) = ", password);
+            for (int i = 0; i < 32; i++) {
+                printf("%02x", given_hash[i]);
+            }
+            printf("\n");
+            return 0;
+        }
+    }
+
+    // If no password was found
+    printf("Did not find a matching password\n");
     return 0;
 }
 
